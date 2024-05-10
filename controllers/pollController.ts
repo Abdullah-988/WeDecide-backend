@@ -29,8 +29,8 @@ export const getPoll = async (req: Request, res: Response) => {
       return res.status(404).send("Poll not found");
     }
 
-    let id = req.body.id;
-    if (!req.body.id) {
+    let id = req.query.id;
+    if (!req.query.id) {
       id = (Math.random() + 1).toString(36).substring(2);
     }
 
