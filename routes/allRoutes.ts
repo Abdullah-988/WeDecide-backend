@@ -8,7 +8,6 @@ import {
   vote,
 } from "../controllers/pollController";
 import { protect } from "../middleware/authMiddleware";
-import sql from "../lib/db";
 
 const router = express.Router();
 

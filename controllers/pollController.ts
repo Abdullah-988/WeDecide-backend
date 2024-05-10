@@ -5,7 +5,7 @@ import { pusherServer } from "../lib/pusher";
 // @desc    Get polls
 // @route   GET /poll
 // @access  Public
-export const getPolls = async (res: Response) => {
+export const getPolls = async (req: Request, res: Response) => {
   try {
     const polls = await sql`SELECT * FROM poll`;
 
