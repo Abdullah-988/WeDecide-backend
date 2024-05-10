@@ -176,7 +176,7 @@ export const vote = async (req: Request, res: Response) => {
       voterId: id,
     };
 
-    pusherServer.trigger(`poll-${pollId}`, "votes", optionObject);
+    await pusherServer.trigger(`poll-${pollId}`, "votes", optionObject);
 
     res.cookie("id", id);
     return res.status(201).json(optionObject);
