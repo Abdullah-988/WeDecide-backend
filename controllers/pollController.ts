@@ -29,8 +29,8 @@ export const getPoll = async (req: Request, res: Response) => {
       return res.status(404).send("Poll not found");
     }
 
-    let id = req.cookies.id;
-    if (!req.cookies.id) {
+    let id = req.body.id;
+    if (!req.body.id) {
       id = (Math.random() + 1).toString(36).substring(2);
     }
 
@@ -66,6 +66,7 @@ export const getPoll = async (req: Request, res: Response) => {
       name: poll[0]["name"],
       endAt: poll[0]["endat"],
       options,
+      voterId: id,
       totalVotes,
       voted,
     };
@@ -137,8 +138,8 @@ export const vote = async (req: Request, res: Response) => {
     const pollId = req.params.pollId;
     const optionId = req.params.optionId;
 
-    let id = req.cookies.id;
-    if (!req.cookies.id) {
+    let id = req.body.id;
+    if (!req.body.id) {
       id = (Math.random() + 1).toString(36).substring(2);
     }
 
@@ -172,6 +173,7 @@ export const vote = async (req: Request, res: Response) => {
     const optionObject = {
       id: option[0]["id"],
       name: option[0]["name"],
+      voterId: id,
     };
 
     pusherServer.trigger(`poll-${pollId}`, "votes", optionObject);

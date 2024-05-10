@@ -7,13 +7,11 @@ interface JwtPayload {
 }
 
 export const protect = async (req: Request, res: Response, next: NextFunction) => {
-  if (req.cookies) {
+  const token = req.body.token;
+  if (token) {
     try {
       // Verify token
-      const decoded = jwt.verify(
-        req.cookies.session,
-        process.env.JWT_SECRET!
-      ) as JwtPayload;
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
 
       // Get user from the token
       const user = await sql`SELECT * FROM users WHERE id = ${parseInt(decoded.id)}`;
