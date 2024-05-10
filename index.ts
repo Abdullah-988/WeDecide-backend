@@ -13,7 +13,12 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    optionsSuccessStatus: 200,
+  })
+);
 
 app.get("/", (req, res) => {
   return res.send("Hello");
