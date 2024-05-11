@@ -23,7 +23,8 @@ export const getPoll = async (req: Request, res: Response) => {
   try {
     const pollId = req.params.id;
 
-    const poll = await sql`SELECT * FROM poll WHERE id = ${pollId}`;
+    const poll =
+      await sql`SELECT id, name, endat AT TIME ZONE 'GMT' AS endat FROM poll WHERE id = ${pollId}`;
 
     if (!poll.length) {
       return res.status(404).send("Poll not found");
@@ -64,7 +65,7 @@ export const getPoll = async (req: Request, res: Response) => {
     const pollData = {
       id: poll[0]["id"],
       name: poll[0]["name"],
-      endAt: poll[0]["endat"],
+      endAt: new Date(poll[0]["endat"]),
       options,
       voterId: id,
       totalVotes,
@@ -98,8 +99,9 @@ export const createPoll = async (req: Request, res: Response) => {
         );
     }
 
-    const poll =
-      await sql`INSERT INTO poll (name, endAt) VALUES (${name}, ${endAt}) RETURNING *`;
+    const poll = await sql`INSERT INTO poll (name, endAt) VALUES (${name}, ${new Date(
+      endAt
+    )}) RETURNING *`;
 
     const pollId = poll[0]["id"];
 
@@ -150,7 +152,8 @@ export const vote = async (req: Request, res: Response) => {
       return res.status(403).send("Already voted on this poll");
     }
 
-    const poll = await sql`SELECT * FROM poll WHERE id = ${pollId}`;
+    const poll =
+      await sql`SELECT *, endat AT TIME ZONE 'GMT' AS endat FROM poll WHERE id = ${pollId}`;
 
     if (!poll.length) {
       return res.status(404).send("Poll not found");
